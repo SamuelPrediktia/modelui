@@ -6,11 +6,13 @@ if __name__ == "__main__":
     st.set_page_config(layout="wide")
 
     df_predictions = data.get_predictions()
+    df_matches = data.get_matches()
 
     # SIDEBAR
-    st.title("Freeport image: What we are looking for")
+    st.title("Target image: Shoe for which we are predicting")
     sku = st.sidebar.selectbox("SKU", df_predictions.index.drop_duplicates().to_list())
+    app.display_target_shoe(df_predictions.loc[sku])
 
-    # Freeport image
-    prediction = df_predictions.loc[sku]
-    app.display_target_shoe(prediction)
+    # SIDEBAR
+    st.title("Target matches: Matched products from previous season")
+    app.display_matches(df_matches.query(f"freeport_sku == '{sku}'"))
