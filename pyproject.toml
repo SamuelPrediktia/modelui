@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "modelui"
+version = "0.1.0"
+description = ""
+authors = ["Felipe Aguirre Martinez <felipe@prediktia.ai>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.19.0"
+pandas = "^1.5.3"
+pyarrow = "^11.0.0"
+google-cloud-storage = "^2.7.0"
+python-dotenv = "^1.0.0"
+Pillow = "^9.4.0"
+
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
