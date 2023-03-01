@@ -45,7 +45,7 @@ def plot_prediktion_with_matches(prediction, matches):
 
     if prediction.std_dev != 0:
         df_dist = (
-            pd.Series(np.linspace(xmin, xmax, 100), name="x")
+            pd.Series(np.linspace(xmin, xmax, 1000), name="x")
             .to_frame()
             .assign(y=lambda df: stats.gamma.pdf(df.x, a=alpha, scale=scale))
         )

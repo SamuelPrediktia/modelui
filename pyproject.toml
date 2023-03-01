@@ -6,7 +6,7 @@ authors = ["Felipe Aguirre Martinez <felipe@prediktia.ai>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "3.8.10"
 streamlit = "^1.19.0"
 pandas = "^1.5.3"
 pyarrow = "^11.0.0"
@@ -15,7 +15,8 @@ python-dotenv = "^1.0.0"
 Pillow = "^9.4.0"
 plotly = "^5.13.1"
 numpy = "^1.24.2"
-scipy = { version = "^1.10.1", python = ">=3.10,<3.12" }
+scipy = "^1.10.1"
+
 
 [tool.poetry.group.dev.dependencies]
 jupyter = "^1.0.0"
