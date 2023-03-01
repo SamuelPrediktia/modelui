@@ -5,12 +5,12 @@ st.set_page_config(
     page_icon="👋",
 )
 
-st.write("# Product search demo App! 👋")
+st.write("# Welcome to Prediktia's predictive model! 👋")
 
 st.sidebar.success("Select a demo above.")
 
 st.markdown(
     """
-    Select a page to start onthe left
+   For the magic to start select Analyze prediction tab
 """
 )

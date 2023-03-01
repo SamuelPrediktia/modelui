@@ -4,14 +4,14 @@ import plotly.express as px
 import scipy.stats as stats
 
 
-def plot_prediktion_with_matches(prediction, matches):
+def plot_prediktion_with_matches(prediction, matches, suffix: str):
     xmin = 0
     xmax = (
         max(
-            prediction.recommended_sales,
-            prediction.prediction,
+            prediction[f"recommended_sales_over_margin{suffix}"],
+            prediction[f"prediction_over_margin{suffix}"],
             prediction.stock_in,
-            matches.recommended_sales.max(),
+            matches[f"recommended_sales_over_margin{suffix}"].max(),
         )
         * 1.1
     )
@@ -23,19 +23,26 @@ def plot_prediktion_with_matches(prediction, matches):
         ),
     )
 
-    if prediction.std_dev != 0:
-        alpha = (prediction.mean_reco**2) / (prediction.std_dev**2)
-        beta = prediction.mean_reco / (prediction.std_dev**2)
+    if prediction[f"std_dev_over_margin{suffix}"] != 0:
+        alpha = (prediction[f"mean_reco_over_margin{suffix}"] ** 2) / (
+            prediction[f"std_dev_over_margin{suffix}"] ** 2
+        )
+        beta = prediction[f"mean_reco_over_margin{suffix}"] / (
+            prediction[f"std_dev_over_margin{suffix}"] ** 2
+        )
         scale = 1 / beta
         matches = matches.assign(
-            pdf=lambda df: stats.gamma.pdf(df.recommended_sales, a=alpha, scale=scale),
+            pdf=lambda df: stats.gamma.pdf(
+                df[f"recommended_sales_over_margin{suffix}"], a=alpha, scale=scale
+            ),
         )
+
     else:
         matches = matches.assign(pdf=0)
 
     fig = px.scatter(
         matches,
-        x="recommended_sales",
+        x=f"recommended_sales_over_margin{suffix}",
         y="pdf",
         hover_data=["freeport_sku_match", "score", "order", "brand"],
         hover_name="label",
@@ -43,7 +50,7 @@ def plot_prediktion_with_matches(prediction, matches):
         symbol_sequence=["x"],
     ).update_traces(mode="markers+text", marker_size=10, textposition="top center")
 
-    if prediction.std_dev != 0:
+    if prediction[f"std_dev_over_margin{suffix}"] != 0:
         df_dist = (
             pd.Series(np.linspace(xmin, xmax, 1000), name="x")
             .to_frame()
@@ -63,7 +70,7 @@ def plot_prediktion_with_matches(prediction, matches):
         )
     fig.add_vrect(
         x0=xmin,
-        x1=prediction.recommended_sales,
+        x1=prediction[f"recommended_sales_over_margin{suffix}"],
         annotation_text=f"underbuy: {prediction.underbuy_cost.round()}",
         annotation_position="bottom left",
         fillcolor="orange",
@@ -71,7 +78,7 @@ def plot_prediktion_with_matches(prediction, matches):
         line_width=0,
     )
     fig.add_vrect(
-        x0=prediction.recommended_sales,
+        x0=prediction[f"recommended_sales_over_margin{suffix}"],
         x1=xmax,
         annotation_text=f"overbuy: {prediction.overbuy_cost.round()}",
         annotation_position="bottom right",
@@ -80,20 +87,20 @@ def plot_prediktion_with_matches(prediction, matches):
         line_width=0,
     )
     fig.add_vline(
-        x=prediction.recommended_sales,
+        x=prediction[f"recommended_sales_over_margin{suffix}"],
         line_width=3,
         line_dash="dash",
         line_color="green",
-        annotation_text=f"Recommended Sales: {prediction.recommended_sales}",
+        annotation_text=f"Recommended Sales: {prediction[f'recommended_sales_over_margin{suffix}']}",
         annotation_position="top right",
         annotation_textangle=90,
     )
     fig.add_vline(
-        x=prediction.prediction,
+        x=prediction[f'prediction_over_margin{suffix}'],
         line_width=2,
         line_dash="dot",
         line_color="red",
-        annotation_text=f"Prediktion: {prediction.prediction} - Expected cost of error {prediction.lost_prediktia.round()}",
+        annotation_text=f"Prediktion: {prediction[f'prediction_over_margin{suffix}']}",
         annotation_position="top right",
         annotation_textangle=90,
     )
@@ -102,7 +109,7 @@ def plot_prediktion_with_matches(prediction, matches):
         line_width=2,
         line_dash="dot",
         line_color="red",
-        annotation_text=f"Human: {prediction.stock_in} - Expected cost of error {prediction.lost_human.round()}",
+        annotation_text=f"Human: {prediction.stock_in}",
         annotation_position="top right",
         annotation_textangle=90,
     )

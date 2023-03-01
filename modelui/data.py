@@ -13,11 +13,11 @@ THUMBNAILS_BUCKET = os.getenv("THUMBNAILS_BUCKET")
 
 
 def get_predictions():
-    return pd.read_parquet(DATA_FOLDER / "predictions.parquet")
+    return pd.read_parquet(DATA_FOLDER / "predictions_margins.parquet")
 
 
 def get_matches():
-    return pd.read_parquet(DATA_FOLDER / "matches.parquet")
+    return pd.read_parquet(DATA_FOLDER / "matches_margins.parquet")
 
 
 def load_thumbnail(

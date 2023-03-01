@@ -8,13 +8,22 @@ def load_thumbnail(sku):
     return data.load_thumbnail(sku=sku)
 
 
-def display_matches(df_matches):
+def display_matches(df_matches, suffix):
     for _, match in df_matches.iterrows():
         col_image, col_table = st.columns([1, 4])
         col_image.image([load_thumbnail(sku=match.freeport_sku_match)])
 
         col_table.write(
-            match.drop(["image_uri", "freeport_sku", "closest_image_filename", "brand"])
+            match[
+                [
+                    "score",
+                    "freeport_sku_match",
+                    "gender",
+                    "brand_match",
+                    "order",
+                    f"recommended_sales_over_margin{suffix}",
+                ]
+            ]
             .rename(match.freeport_sku_match)
             .to_frame()
             .T.to_html(escape=False),
@@ -23,6 +32,7 @@ def display_matches(df_matches):
 
 
 if __name__ == "__main__":
+    suffix = "_10"
     st.set_page_config(layout="wide")
 
     df_predictions = data.get_predictions()
@@ -34,17 +44,32 @@ if __name__ == "__main__":
     prediction = df_predictions.loc[sku]
     matches = df_matches.query(f"freeport_sku == '{sku}'")
 
-    st.dataframe(prediction.rename(sku).to_frame().T)
+    st.dataframe(
+        prediction.rename(sku)[
+            [
+                f"mean_reco_over_margin{suffix}",
+                f"std_dev_over_margin{suffix}",
+                "overweight",
+                "underweight",
+                "cost",
+                "price",
+                f"prediction_over_margin{suffix}",
+            ]
+        ]
+        .to_frame()
+        .T
+    )
     col_image, col_plot = st.columns([1, 6])
     col_image.image([load_thumbnail(sku=sku).resize((170, 170))])
     col_plot.plotly_chart(
         plot.plot_prediktion_with_matches(
             prediction=prediction,
             matches=matches,
+            suffix=suffix,
         ),
         use_container_width=True,
     )
 
     # SIDEBAR
     st.title("Target matches: Matched products from previous season")
-    display_matches(matches)
+    display_matches(matches, suffix=suffix)
