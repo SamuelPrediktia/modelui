@@ -32,7 +32,7 @@ def display_matches(df_matches, suffix):
 
 
 if __name__ == "__main__":
-    suffix = "_10"
+    # suffix = "_10"
     st.set_page_config(layout="wide")
 
     df_predictions = data.get_predictions()
@@ -41,6 +41,15 @@ if __name__ == "__main__":
     # SIDEBAR
     st.title("Target image: Shoe for which we are predicting")
     sku = st.sidebar.selectbox("SKU", df_predictions.index.drop_duplicates().to_list())
+    margin = st.sidebar.selectbox(
+        "margin", ["target margin", "target margin - 10", "target margin - 20"]
+    )
+    if margin == "target margin":
+        suffix = ""
+    elif margin == "target margin - 10":
+        suffix = "_10"
+    elif margin == "target margin - 20":
+        suffix = "_20"
     prediction = df_predictions.loc[sku]
     matches = df_matches.query(f"freeport_sku == '{sku}'")
 
