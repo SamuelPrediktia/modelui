@@ -71,7 +71,7 @@ def plot_prediktion_with_matches(prediction, matches, suffix: str):
     fig.add_vrect(
         x0=xmin,
         x1=prediction[f"recommended_sales_over_margin{suffix}"],
-        annotation_text=f"underbuy: {prediction.underbuy_cost.round()}",
+        annotation_text=f"underbuy: {prediction[f'underweight{suffix}'].round()}",
         annotation_position="bottom left",
         fillcolor="orange",
         opacity=0.25,
@@ -80,7 +80,7 @@ def plot_prediktion_with_matches(prediction, matches, suffix: str):
     fig.add_vrect(
         x0=prediction[f"recommended_sales_over_margin{suffix}"],
         x1=xmax,
-        annotation_text=f"overbuy: {prediction.overbuy_cost.round()}",
+        annotation_text=f"overbuy: {prediction[f'overweight{suffix}'].round()}",
         annotation_position="bottom right",
         fillcolor="blue",
         opacity=0.25,
@@ -96,7 +96,7 @@ def plot_prediktion_with_matches(prediction, matches, suffix: str):
         annotation_textangle=90,
     )
     fig.add_vline(
-        x=prediction[f'prediction_over_margin{suffix}'],
+        x=prediction[f"prediction_over_margin{suffix}"],
         line_width=2,
         line_dash="dot",
         line_color="red",

@@ -58,8 +58,8 @@ if __name__ == "__main__":
             [
                 f"mean_reco_over_margin{suffix}",
                 f"std_dev_over_margin{suffix}",
-                "overweight",
-                "underweight",
+                f"overweight{suffix}",
+                f"underweight{suffix}",
                 "cost",
                 "price",
                 f"prediction_over_margin{suffix}",
