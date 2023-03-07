@@ -50,7 +50,7 @@ def plot_prediktion_with_matches(prediction, matches, suffix: str):
         symbol_sequence=["x"],
     ).update_traces(mode="markers+text", marker_size=10, textposition="top center")
 
-    if prediction[f"std_dev_over_margin{suffix}"] != 0:
+    if prediction[f"alpha{suffix}"] != 0:
         df_dist = (
             pd.Series(np.linspace(xmin, xmax, 1000), name="x")
             .to_frame()
