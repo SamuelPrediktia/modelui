@@ -57,7 +57,7 @@ if __name__ == "__main__":
         prediction.rename(sku)[
             [
                 f"mean_reco_over_margin{suffix}",
-                f"std_dev_over_margin{suffix}",
+                f"alpha{suffix}",
                 f"overweight{suffix}",
                 f"underweight{suffix}",
                 "cost",
