@@ -24,8 +24,7 @@ def plot_prediktion_with_matches(prediction, matches, suffix: str):
     )
 
     if prediction[f"alpha{suffix}"] != 0:
-        
-        scale = 1 / prediction[f'beta{suffix}']
+        scale = 1 / prediction[f"beta{suffix}"]
         matches = matches.assign(
             pdf=lambda df: stats.gamma.pdf(
                 df[f"recommended_sales_over_margin{suffix}"],
@@ -51,7 +50,7 @@ def plot_prediktion_with_matches(prediction, matches, suffix: str):
         df_dist = (
             pd.Series(np.linspace(xmin, xmax, 1000), name="x")
             .to_frame()
-            .assign(y=lambda df: stats.gamma.pdf(df.x, a=alpha, scale=scale))
+            .assign(y=lambda df: stats.gamma.pdf(df.x, a=prediction[f"alpha{suffix}"], scale=scale))
         )
 
         fig.add_trace(
