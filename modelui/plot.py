@@ -23,17 +23,14 @@ def plot_prediktion_with_matches(prediction, matches, suffix: str):
         ),
     )
 
-    if prediction[f"std_dev_over_margin{suffix}"] != 0:
-        alpha = (prediction[f"mean_reco_over_margin{suffix}"] ** 2) / (
-            prediction[f"std_dev_over_margin{suffix}"] ** 2
-        )
-        beta = prediction[f"mean_reco_over_margin{suffix}"] / (
-            prediction[f"std_dev_over_margin{suffix}"] ** 2
-        )
-        scale = 1 / beta
+    if prediction[f"alpha{suffix}"] != 0:
+        
+        scale = 1 / prediction[f'beta{suffix}']
         matches = matches.assign(
             pdf=lambda df: stats.gamma.pdf(
-                df[f"recommended_sales_over_margin{suffix}"], a=alpha, scale=scale
+                df[f"recommended_sales_over_margin{suffix}"],
+                a=prediction[f"alpha{suffix}"],
+                scale=scale,
             ),
         )
 
