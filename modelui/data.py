@@ -12,12 +12,23 @@ DATA_FOLDER = Path(__file__).parent / "resources"
 THUMBNAILS_BUCKET = os.getenv("THUMBNAILS_BUCKET")
 
 
-def get_predictions():
-    return pd.read_parquet(DATA_FOLDER / "predictions_margins.parquet")
+def get_predictions(approach: str):
+    if approach=='coventional':
+        return pd.read_parquet(DATA_FOLDER / "predictions_margins.parquet")
+    elif approach=='consistent-weighted':
+        return pd.read_parquet(DATA_FOLDER / "predictions_margins_weighted.parquet")
+    elif approach=='likelihood':
+        return pd.read_parquet(DATA_FOLDER / "predictions_margins_likelihood.parquet")
 
 
-def get_matches():
-    return pd.read_parquet(DATA_FOLDER / "matches_margins.parquet")
+
+def get_matches(approach: str):
+    if approach=='coventional':
+        return pd.read_parquet(DATA_FOLDER / "matches_margins.parquet")
+    elif approach=='consistent-weighted':
+        return pd.read_parquet(DATA_FOLDER / "matches_margins_weighted.parquet")
+    elif approach=='likelihood':
+        return pd.read_parquet(DATA_FOLDER / "matches_margins_likelihood.parquet")
 
 
 def load_thumbnail(

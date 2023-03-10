@@ -35,8 +35,12 @@ if __name__ == "__main__":
     # suffix = "_10"
     st.set_page_config(layout="wide")
 
-    df_predictions = data.get_predictions()
-    df_matches = data.get_matches()
+    approach = st.sidebar.selectbox(
+        "approach", ["coventional", "consistent-weighted", "likelihood"]
+    )
+
+    df_predictions = data.get_predictions(approach=approach)
+    df_matches = data.get_matches(approach=approach)
 
     # SIDEBAR
     st.title("Target image: Shoe for which we are predicting")
@@ -44,6 +48,7 @@ if __name__ == "__main__":
     margin = st.sidebar.selectbox(
         "margin", ["target margin", "target margin - 10", "target margin - 20"]
     )
+
     if margin == "target margin":
         suffix = ""
     elif margin == "target margin - 10":
