@@ -17,6 +17,7 @@ def display_matches(df_matches, suffix):
             match[
                 [
                     "score",
+                    'cost_match',
                     "freeport_sku_match",
                     "gender",
                     "brand_match",
